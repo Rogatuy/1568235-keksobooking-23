@@ -74,9 +74,7 @@ const PHOTOS_OBJECT = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
 
-const getRandomElement = (elements) => {
-  return elements[getRandomWhole(0, elements.length - 1)], /*не могу понятть в чем ошибка. мучаюсь уже два часа. Подскажи, пожалуйста, что тут не так?*/
-};
+const getRandomElement = (elements) => elements[getRandomWhole(0, elements.length - 1)];
 
 const getAvatar = () => {
   const getIndexAvatar = getRandomWhole(0, AVATAR_ADRESS.length - 1);
@@ -89,9 +87,9 @@ const getFeatures = () => {
   const featuresLength = getRandomWhole(0,6);
   const featuresMassive = [];
   featuresMassive.length = featuresLength;
-  for (let i = 0; i <= featuresMassive.length-1; i++) {
-    const number = getRandomWhole(0, FEATURES_OBJECT.length - 1)
-    featuresMassive[i] = FEATURES_OBJECT[number];
+  for (let index = 0; index <= featuresMassive.length-1; index++) {
+    const number = getRandomWhole(0, FEATURES_OBJECT.length - 1);
+    featuresMassive[index] = FEATURES_OBJECT[number];
     FEATURES_OBJECT.splice(number, 1);
   }
   return featuresMassive;
@@ -101,24 +99,22 @@ const getPhoto = () => {
   const photoMassive = [];
   const photoMassiveLength = getRandomWhole(0,Number.POSITIVE_INFINITY);
   photoMassive.length = photoMassiveLength;
-  for (let i = 0; i <= photoMassive.length-1; i++) {
-    const number = getRandomWhole(0, PHOTOS_OBJECT.length - 1)
-    photoMassive[i] = PHOTOS_OBJECT[number];
-  };
+  for (let index = 0; index <= photoMassive.length-1; index++) {
+    const number = getRandomWhole(0, PHOTOS_OBJECT.length - 1);
+    photoMassive[index] = PHOTOS_OBJECT[number];
+  }
   return photoMassive;
 };
 
 
-const author = () => {
-  return {
-    avatar: getAvatar(),
-  };
-};
+const author = () => ({
+  avatar: getAvatar(),
+});
 
 const offer = () => {
-  return {
+  const offered = {
     title: 'Объект аренды',
-    address: location.lat + ' ' + location.lng,
+    address: getRandomFractional(35.65, 35.7, 5) + ' ' + getRandomFractional(139.7, 139.8, 5),
     price: getRandomWhole(0, Number.POSITIVE_INFINITY),
     type: getRandomElement(TYPE_OBJECT),
     rooms: getRandomWhole(0, Number.POSITIVE_INFINITY),
@@ -129,19 +125,13 @@ const offer = () => {
     description: 'Прекрасное жилье',
     photos: getPhoto(),
   };
-};
-
-const location = () => {
-  return {
-    lat: getRandomFractional(35.65,35.7,5),
-    lng: getRandomFractional(139.7,139.8,5),
-  };
+  return offered;
 };
 
 const getObjectMassive = () => {
   const objectMassive = [];
-  for (let i = 0; i <= 9; i++) {
-    objectMassive[i] = [author(), offer(), location()];
+  for (let index = 0; index <= 9; index++) {
+    objectMassive[index] = [author(), offer(), location()];
   }
   return objectMassive;
 };
