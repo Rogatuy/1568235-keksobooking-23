@@ -80,7 +80,7 @@ const getAvatar = () => {
   const getIndexAvatar = getRandomWhole(0, AVATAR_ADRESS.length - 1);
   const avatar = AVATAR_ADRESS[getIndexAvatar];
   AVATAR_ADRESS.splice(getIndexAvatar, 1);
-  return avatar;
+  return avatar; //работает
 };
 
 const getFeatures = () => {
@@ -92,29 +92,29 @@ const getFeatures = () => {
     featuresMassive[index] = FEATURES_OBJECT[number];
     FEATURES_OBJECT.splice(number, 1);
   }
-  return featuresMassive;
+  return featuresMassive; //работает, но, наверное не верно, что я удаляю из FEATURES_OBJECT элементы. ибо когда будет создаваться второй объект, в исходном FEATURES_OBJECT уже будет меньше значений. так?
 };
 
 const getPhoto = () => {
   const photoMassive = [];
-  const photoMassiveLength = getRandomWhole(0,Number.POSITIVE_INFINITY);
+  const photoMassiveLength = getRandomWhole(0,Number.POSITIVE_INFINITY); //вот тут ругается на число бесконечность. просто в задании сказано "photos, массив строк — массив случайной длины из значений", вот я и забил бесконечность) поясни, пожалуйста, какую границу тут ставить?)
   photoMassive.length = photoMassiveLength;
   for (let index = 0; index <= photoMassive.length-1; index++) {
     const number = getRandomWhole(0, PHOTOS_OBJECT.length - 1);
     photoMassive[index] = PHOTOS_OBJECT[number];
   }
-  return photoMassive;
+  return photoMassive; // в общем работает, при границе переменной photoMassiveLength адекватной
 };
 
 
 const author = () => ({
   avatar: getAvatar(),
-});
+}); //работает
 
 const offer = () => {
   const offered = {
     title: 'Объект аренды',
-    address: getRandomFractional(35.65, 35.7, 5) + ' ' + getRandomFractional(139.7, 139.8, 5),
+    address: `${getRandomFractional(35.65, 35.7, 5)  } ${  getRandomFractional(139.7, 139.8, 5)}`,
     price: getRandomWhole(0, Number.POSITIVE_INFINITY),
     type: getRandomElement(TYPE_OBJECT),
     rooms: getRandomWhole(0, Number.POSITIVE_INFINITY),
@@ -126,14 +126,22 @@ const offer = () => {
     photos: getPhoto(),
   };
   return offered;
-};
+};  //работает, если изменить границу рандомного числа
 
+// eslint-disable-next-line no-unused-vars
+function getLocation() {
+  const location = {
+    lat: getRandomFractional(35.65, 35.7, 5),
+    lng: getRandomFractional(139.7, 139.8, 5),
+  };
+  return location;
+}
+
+// eslint-disable-next-line no-unused-vars
 const getObjectMassive = () => {
   const objectMassive = [];
   for (let index = 0; index <= 9; index++) {
-    objectMassive[index] = [author(), offer(), location()];
+    objectMassive[index] = [author(), offer(), getLocation()];
   }
   return objectMassive;
 };
-
-console.log(getObjectMassive());
