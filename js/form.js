@@ -23,6 +23,7 @@ userTitleInput.addEventListener('input', () => {
   userTitleInput.reportValidity();
 });
 
+
 const userPriceInput = newAd.querySelector('#price');
 userPriceInput.addEventListener('input', () => {
   const valuePrice = userPriceInput.value;
@@ -34,6 +35,7 @@ userPriceInput.addEventListener('input', () => {
   userPriceInput.reportValidity();
 });
 
+
 const userTypeSelect = newAd.querySelector('#type');
 
 userTypeSelect.addEventListener('change', (event) => {
@@ -43,7 +45,7 @@ userTypeSelect.addEventListener('change', (event) => {
 });
 
 
-// ниже топорный код!!!!))))
+// ниже топорный код!!!!))))))))
 const userRoomNumberSelect = newAd.querySelector('#room_number');
 const userCapacitySelect = newAd.querySelector('#capacity');
 userRoomNumberSelect.addEventListener('change', (event) => {
