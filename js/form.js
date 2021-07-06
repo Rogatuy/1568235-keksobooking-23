@@ -23,7 +23,6 @@ userTitleInput.addEventListener('input', () => {
   userTitleInput.reportValidity();
 });
 
-
 const userPriceInput = newAd.querySelector('#price');
 userPriceInput.addEventListener('input', () => {
   const valuePrice = userPriceInput.value;
@@ -35,7 +34,6 @@ userPriceInput.addEventListener('input', () => {
   userPriceInput.reportValidity();
 });
 
-
 const userTypeSelect = newAd.querySelector('#type');
 
 userTypeSelect.addEventListener('change', (event) => {
@@ -44,33 +42,27 @@ userTypeSelect.addEventListener('change', (event) => {
   userPriceInput.min = LODGING_MIN_PRICE[valueOption];
 });
 
-
-// ниже топорный код!!!!))))))))
 const userRoomNumberSelect = newAd.querySelector('#room_number');
 const userCapacitySelect = newAd.querySelector('#capacity');
 userRoomNumberSelect.addEventListener('change', (event) => {
+  userCapacitySelect.querySelector('[value="2"]').setAttribute('disabled', 'disabled');
+  userCapacitySelect.querySelector('[value="3"]').setAttribute('disabled', 'disabled');
+  userCapacitySelect.querySelector('[value="0"]').setAttribute('disabled', 'disabled');
+  userCapacitySelect.querySelector('[value="1"]').setAttribute('disabled', 'disabled');
+
   if (event.target.value === '1') {
     userCapacitySelect.querySelector('[value="1"]').removeAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="2"]').setAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="3"]').setAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="0"]').setAttribute('disabled', 'disabled');
   }
   if (event.target.value === '2') {
     userCapacitySelect.querySelector('[value="2"]').removeAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="3"]').setAttribute('disabled', 'disabled');
     userCapacitySelect.querySelector('[value="1"]').removeAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="0"]').setAttribute('disabled', 'disabled');
   }
   if (event.target.value === '3') {
     userCapacitySelect.querySelector('[value="2"]').removeAttribute('disabled', 'disabled');
     userCapacitySelect.querySelector('[value="3"]').removeAttribute('disabled', 'disabled');
     userCapacitySelect.querySelector('[value="1"]').removeAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="0"]').setAttribute('disabled', 'disabled');
   }
   if (event.target.value === '100') {
-    userCapacitySelect.querySelector('[value="2"]').setAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="3"]').setAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="1"]').setAttribute('disabled', 'disabled');
     userCapacitySelect.querySelector('[value="0"]').removeAttribute('disabled', 'disabled');
   }
-}); //этот код дичайше топорный.)))мне прямо неприятно, насколько он топорный.)))))) Можешь подсказать, как можно сделать иначе? И я в разметку изначально добавил disabled на все, кроме 1, так же можно сделать?
+});
