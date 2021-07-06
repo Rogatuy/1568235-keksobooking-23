@@ -97,7 +97,7 @@ const getFeatures = () => {
 
 const getPhoto = () => {
   const photoMassive = [];
-  const photoMassiveLength = getRandomWhole(0,5);
+  const photoMassiveLength = getRandomWhole(1,5);
   photoMassive.length = photoMassiveLength;
   for (let index = 0; index <= photoMassive.length-1; index++) {
     const number = getRandomWhole(0, PHOTOS_OBJECT.length - 1);
@@ -145,3 +145,7 @@ const getObjectMassive = () => {
   }
   return objectMassive;
 };
+
+
+export {offer};
+export {author};
