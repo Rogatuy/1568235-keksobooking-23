@@ -1,4 +1,6 @@
 
+import {preloadDisabledRemove} from './pre-load.js';
+
 const nextButton = document.querySelector('#next');
 
 const resetButton = document.querySelector('#reset');
@@ -14,6 +16,8 @@ L.tileLayer(
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 ).addTo(map);
+
+map.onload = preloadDisabledRemove();
 
 const mainPinIcon = L.icon({
   iconUrl: 'img/main-pin.svg',
