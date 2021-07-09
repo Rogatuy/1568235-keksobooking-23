@@ -8,9 +8,10 @@ const LODGING_MIN_PRICE = {
   house: 5000,
   palace: 10000,
 };
-const newAd = document.querySelector('.ad-form');
-const userTitleInput = newAd.querySelector('#title');
 
+const newAd = document.querySelector('.ad-form');
+
+const userTitleInput = newAd.querySelector('#title');
 userTitleInput.addEventListener('input', () => {
   const valueLength = userTitleInput.value.length;
   if (valueLength < MIN_TITLE_LENGTH) {
