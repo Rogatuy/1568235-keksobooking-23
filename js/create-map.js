@@ -1,4 +1,3 @@
-
 import {preloadDisabledRemove} from './pre-load.js';
 
 const nextButton = document.querySelector('#next');
@@ -37,6 +36,10 @@ const marker = L.marker(
 );
 
 marker.addTo(map);
+export {marker};
+
+const addressForm = document.querySelector('#address');
+addressForm.value = `${marker.getLatLng().lat  }, ${  marker.getLatLng().lng}`;
 
 resetButton.addEventListener('click', () => {
   marker.setLatLng({
@@ -48,6 +51,7 @@ resetButton.addEventListener('click', () => {
     lat: 35.6894,
     lng: 139.692,
   }, 10);
+  addressForm.value = `${marker.getLatLng().lat  }, ${  marker.getLatLng().lng}`;
 });
 
 const points = [

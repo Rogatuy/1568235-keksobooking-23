@@ -1,3 +1,5 @@
+import {marker} from './create-map.js';
+
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE_VALUE = 1000000;
@@ -67,3 +69,13 @@ userRoomNumberSelect.addEventListener('change', (event) => {
     userCapacitySelect.querySelector('[value="0"]').removeAttribute('disabled', 'disabled');
   }
 });
+
+const addressForm = newAd.querySelector('#address');
+const addAddressInput = function () {
+  marker.on('moveend', (evt) => {
+    const mainAddress = evt.target.getLatLng();
+    addressForm.value = `${mainAddress.lat.toFixed(5)  }, ${  mainAddress.lng.toFixed(5)}`;
+  });
+};
+
+addAddressInput();
