@@ -1,3 +1,5 @@
+import {marker} from './create-map.js';
+
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE_VALUE = 1000000;
@@ -8,9 +10,10 @@ const LODGING_MIN_PRICE = {
   house: 5000,
   palace: 10000,
 };
-const newAd = document.querySelector('.ad-form');
-const userTitleInput = newAd.querySelector('#title');
 
+const newAd = document.querySelector('.ad-form');
+
+const userTitleInput = newAd.querySelector('#title');
 userTitleInput.addEventListener('input', () => {
   const valueLength = userTitleInput.value.length;
   if (valueLength < MIN_TITLE_LENGTH) {
@@ -66,3 +69,13 @@ userRoomNumberSelect.addEventListener('change', (event) => {
     userCapacitySelect.querySelector('[value="0"]').removeAttribute('disabled', 'disabled');
   }
 });
+
+const addressForm = newAd.querySelector('#address');
+const addAddressInput = function () {
+  marker.on('moveend', (evt) => {
+    const mainAddress = evt.target.getLatLng();
+    addressForm.value = `${mainAddress.lat.toFixed(5)  }, ${  mainAddress.lng.toFixed(5)}`;
+  });
+};
+
+addAddressInput();

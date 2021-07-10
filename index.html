@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="leaflet/leaflet.css">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кексобукинг</title>
@@ -19,8 +20,12 @@
     <section class="map">
 
       <!-- Блок для вставки карты -->
-      <div class="map__canvas" id="map-canvas"></div>
+      <div class="map__canvas" id="map-canvas">
 
+        <script src="leaflet/leaflet.js"></script>
+      </div>
+      <button id="reset" type="button">Вернуть метку на место</button>
+      <button id="next" type="button">Показать оставшиеся точки на карте и скрыть кнопку</button>
       <!-- Фильтрация объявлений -->
       <div class="map__filters-container">
         <form action="#" class="map__filters" autocomplete="off">
@@ -91,7 +96,7 @@
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide">
           <label class="ad-form__label" for="address">Адрес (координаты)</label>
-          <input id="address" name="address" type="text">
+          <input id="address" name="address" type="text" readonly>
         </fieldset>
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="type">Тип жилья</label>
@@ -132,10 +137,10 @@
         <fieldset class="ad-form__element">
           <label class="ad-form__label" for="capacity">Количество мест</label>
           <select id="capacity" name="capacity">
-            <option value="3" disabled>для 3 гостей</option>
-            <option value="2" disabled>для 2 гостей</option>
+            <option value="3">для 3 гостей</option>
+            <option value="2">для 2 гостей</option>
             <option value="1" selected>для 1 гостя</option>
-            <option value="0" disabled>не для гостей</option>
+            <option value="0">не для гостей</option>
           </select>
         </fieldset>
         <fieldset class="ad-form__element ad-form__element--wide features">
@@ -230,5 +235,6 @@
     </div>
   </template>
   <script src="js/main.js" type="module"></script>
+
 </body>
 </html>
