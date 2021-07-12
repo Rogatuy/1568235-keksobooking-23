@@ -1,6 +1,6 @@
 import {preloadDisabledRemove} from './pre-load.js';
 
-const nextButton = document.querySelector('#next');
+// const nextButton = document.querySelector('#next');
 
 const resetButton = document.querySelector('#reset');
 const map = L.map('map-canvas')
@@ -54,18 +54,18 @@ resetButton.addEventListener('click', () => {
   addressForm.value = `${marker.getLatLng().lat  }, ${  marker.getLatLng().lng}`;
 });
 
-const points = [
-  {
-    title: 'Номер раз',
-    lat: 35.5894,
-    lng: 139.592,
-  },
-  {
-    title: 'Номер два',
-    lat: 35.7894,
-    lng: 139.792,
-  },
-];
+// const points = [
+//   {
+//     title: 'Номер раз',
+//     lat: 35.5894,
+//     lng: 139.592,
+//   },
+//   {
+//     title: 'Номер два',
+//     lat: 35.7894,
+//     lng: 139.792,
+//   },
+// ];
 
 const createCustomPopup = (point) => {
   const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
@@ -104,14 +104,17 @@ const createMarker = (point) => {
     );
 };
 
-points.forEach((point) => {
-  createMarker(point);
-});
+export {createMarker};
 
-nextButton.addEventListener('click', () => {
-  markerGroup.clearLayers();
-  points.slice(0, points.length / 2).forEach((point) => {
-    createMarker(point);
-  });
-  nextButton.remove();
-});
+
+// points.forEach((point) => {
+//   createMarker(point);
+// });
+
+// nextButton.addEventListener('click', () => {
+//   markerGroup.clearLayers();
+//   points.slice(0, points.length / 2).forEach((point) => {
+//     createMarker(point);
+//   });
+//   nextButton.remove();
+// });

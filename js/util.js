@@ -1,37 +1,4 @@
-const getRandomWhole = (min, max) => {
-  if (min < 0) {
-    min = 0;
-  }
-
-  if (max <= min) {
-    max = min + 1;
-  }
-
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min; //https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-};
-
-const getRandomFractional = (min, max, quantity) => {
-  if (min < 0) {
-    min = 0;
-  }
-
-  if (max <= min) {
-    max = min + 1;
-  }
-
-  if (quantity < 0) {
-    quantity = 1;
-  }
-
-  if (quantity > 20) {
-    quantity = 20;
-  }
-
-  return (Math.random() * (max - min) + min).toFixed(quantity);
-};
-
+const ALERT_SHOW_TIME = 5000;
 const AVATAR_ADRESS = [
   'img/avatars/user01.png',
   'img/avatars/user02.png',
@@ -73,6 +40,40 @@ const PHOTOS_OBJECT = [
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
   'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg',
 ];
+
+const getRandomWhole = (min, max) => {
+  if (min < 0) {
+    min = 0;
+  }
+
+  if (max <= min) {
+    max = min + 1;
+  }
+
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; //https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+};
+
+const getRandomFractional = (min, max, quantity) => {
+  if (min < 0) {
+    min = 0;
+  }
+
+  if (max <= min) {
+    max = min + 1;
+  }
+
+  if (quantity < 0) {
+    quantity = 1;
+  }
+
+  if (quantity > 20) {
+    quantity = 20;
+  }
+
+  return (Math.random() * (max - min) + min).toFixed(quantity);
+};
 
 const getRandomElement = (elements) => elements[getRandomWhole(0, elements.length - 1)];
 
@@ -149,3 +150,25 @@ const getObjectMassive = () => {
 
 export {offer};
 export {author};
+
+
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = 100;
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = 0;
+  alertContainer.style.top = 0;
+  alertContainer.style.right = 0;
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+  alertContainer.textContent = message;
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+};
+
+export {showAlert};

@@ -79,3 +79,17 @@ const addAddressInput = function () {
 };
 
 addAddressInput();
+
+newAd.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+
+  const formData = new FormData(evt.target);
+
+  fetch(
+    'https://23.javascript.pages.academy/keksobooking/data',
+    {
+      method: 'POST',
+      body: formData,
+    },
+  );
+});
