@@ -24,8 +24,6 @@
 
         <script src="leaflet/leaflet.js"></script>
       </div>
-      <button id="reset" type="button">Вернуть метку на место</button>
-      <button id="next" type="button">Показать оставшиеся точки на карте и скрыть кнопку</button>
       <!-- Фильтрация объявлений -->
       <div class="map__filters-container">
         <form action="#" class="map__filters" autocomplete="off">
@@ -233,6 +231,13 @@
       <p class="error__message">Ошибка размещения объявления</p>
       <button type="button" class="error__button">Попробовать снова</button>
     </div>
+  </template>
+
+  <!-- Сообщение об ошибке сервера -->
+  <template id="error-server">
+    <div class="error-server">
+      <p class="error-server__message">Ошибка запроса на сервер. Попробуйте позже</p>
+      </div>
   </template>
   <script src="js/main.js" type="module"></script>
 

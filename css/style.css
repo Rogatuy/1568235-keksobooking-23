@@ -924,7 +924,8 @@ fieldset {
  */
 
 .success,
-.error {
+.error,
+.error-server {
   position: fixed;
   top: 0;
   left: 0;
@@ -946,7 +947,8 @@ fieldset {
 }
 
 .success__message,
-.error__message {
+.error__message,
+.error-server__message {
   position: relative;
 
   color: #ffffff;
@@ -955,7 +957,8 @@ fieldset {
 }
 
 .success__message::before,
-.error__message::before {
+.error__message::before,
+.error-server__message:before {
   content: "";
   position: absolute;
 
@@ -974,7 +977,8 @@ fieldset {
           transform: translateX(-50%);
 }
 
-.error__message::before {
+.error__message::before,
+.error-server__message:before {
   background-image: url("../img/muffin-red.svg");
 }
 
