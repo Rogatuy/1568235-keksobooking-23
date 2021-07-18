@@ -1,8 +1,13 @@
 import {preloadDisabledRemove} from './pre-load.js';
 
-const nextButton = document.querySelector('#next');
+const LODGING_TYPE = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель',
+};
 
-const resetButton = document.querySelector('#reset');
 const map = L.map('map-canvas')
   .setView ({
     lat: 35.6894,
@@ -41,7 +46,7 @@ export {marker};
 const addressForm = document.querySelector('#address');
 addressForm.value = `${marker.getLatLng().lat  }, ${  marker.getLatLng().lng}`;
 
-resetButton.addEventListener('click', () => {
+const resetMarker = function () {
   marker.setLatLng({
     lat: 35.6894,
     lng: 139.692,
@@ -52,35 +57,74 @@ resetButton.addEventListener('click', () => {
     lng: 139.692,
   }, 10);
   addressForm.value = `${marker.getLatLng().lat  }, ${  marker.getLatLng().lng}`;
-});
-
-const points = [
-  {
-    title: 'Номер раз',
-    lat: 35.5894,
-    lng: 139.592,
-  },
-  {
-    title: 'Номер два',
-    lat: 35.7894,
-    lng: 139.792,
-  },
-];
+};
 
 const createCustomPopup = (point) => {
   const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
   const popupElement = balloonTemplate.cloneNode(true);
 
-  popupElement.querySelector('.popup__title').textContent = point.title;
-  popupElement.querySelector('.popup__text--address').textContent = `Координаты: ${point.lat}, ${point.lng}`;
+  if (typeof point.offer['title'] !== 'undefined') {
+    popupElement.querySelector('.popup__title').textContent = point.offer.title;
+  }else {
+    popupElement.querySelector('.popup__title').remove();
+  }
 
+  if (typeof point.offer['address'] !== 'undefined') {
+    popupElement.querySelector('.popup__text--address').textContent = point.offer.address;
+  }else {
+    popupElement.querySelector('.popup__text--address').remove();
+  }
+
+  if (typeof point.offer['price'] !== 'undefined') {
+    popupElement.querySelector('.popup__text--price').textContent =  `${point.offer.price  }₽/ночь`;
+  }else {
+    popupElement.querySelector('.popup__text--price').remove();
+  }
+
+  if (typeof point.offer['type'] !== 'undefined') {
+    popupElement.querySelector('.popup__type').textContent = LODGING_TYPE[point.offer.type];
+  }else {
+    popupElement.querySelector('.popup__type').remove();
+  }
+
+  if (typeof point.offer['rooms'] !== 'undefined' && typeof point.offer['guests'] !== 'undefined') {
+    popupElement.querySelector('.popup__text--capacity').textContent =  `${point.offer.rooms  } комнаты для ${  point.offer.guests  } гостей`;
+  }else {
+    popupElement.querySelector('.popup__text--capacity').remove();
+  }
+
+  if (typeof point.offer['checkin'] !== 'undefined' && typeof point.offer['checkout'] !== 'undefined') {
+    popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${  point.offer.checkin  }, выезд до ${  point.offer.checkout}`;
+  }else {
+    popupElement.querySelector('.popup__text--time').remove();
+  }
+
+  if (typeof point.offer['features'] !== 'undefined') {
+    popupElement.querySelector('.popup__features').textContent = point.offer.features.join(', ');
+  }else {
+    popupElement.querySelector('.popup__features').remove();
+  }
+
+  popupElement.querySelector('.popup__description').textContent = point.offer.description;
+  popupElement.querySelector('.popup__avatar').src = point.author.avatar;
+
+  const photos = popupElement.querySelector('.popup__photos');
+  const imageLodging = photos.querySelector('img');
+  if (typeof point.offer['photos'] !== 'undefined') {
+    for (let i = 0; i < point.offer.photos.length; i++) {
+      imageLodging.src = point.offer.photos[i];
+      photos.appendChild(imageLodging);
+    }
+  } else {
+    popupElement.querySelector('.popup__photos').remove();
+  }
   return popupElement;
 };
 
 const markerGroup = L.layerGroup().addTo(map);
 
 const createMarker = (point) => {
-  const {lat, lng} = point;
+  const {lat, lng} = point.location;
   const icon = L.icon({
     iconUrl: 'img/pin.svg',
     iconSize: [40, 40],
@@ -104,14 +148,4 @@ const createMarker = (point) => {
     );
 };
 
-points.forEach((point) => {
-  createMarker(point);
-});
-
-nextButton.addEventListener('click', () => {
-  markerGroup.clearLayers();
-  points.slice(0, points.length / 2).forEach((point) => {
-    createMarker(point);
-  });
-  nextButton.remove();
-});
+export {createMarker, createCustomPopup, resetMarker};

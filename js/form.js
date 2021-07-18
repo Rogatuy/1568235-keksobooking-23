@@ -1,4 +1,6 @@
-import {marker} from './create-map.js';
+import {marker, resetMarker} from './create-map.js';
+import {displayWindowSuccess, displayWindowError} from './modal_success_error.js';
+import {sendData} from './api.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -11,9 +13,17 @@ const LODGING_MIN_PRICE = {
   palace: 10000,
 };
 
-const newAd = document.querySelector('.ad-form');
+const advertForm = document.querySelector('.ad-form');
 
-const userTitleInput = newAd.querySelector('#title');
+const getPictures = function (picture) {
+  const pictureInput = advertForm.querySelector(picture);
+  pictureInput.setAttribute('accept', 'image/png, image/jpeg');
+};
+
+getPictures('#avatar');
+getPictures('#images');
+
+const userTitleInput = advertForm.querySelector('#title');
 userTitleInput.addEventListener('input', () => {
   const valueLength = userTitleInput.value.length;
   if (valueLength < MIN_TITLE_LENGTH) {
@@ -26,7 +36,7 @@ userTitleInput.addEventListener('input', () => {
   userTitleInput.reportValidity();
 });
 
-const userPriceInput = newAd.querySelector('#price');
+const userPriceInput = advertForm.querySelector('#price');
 userPriceInput.addEventListener('input', () => {
   const valuePrice = userPriceInput.value;
   if (valuePrice > MAX_PRICE_VALUE) {
@@ -37,7 +47,7 @@ userPriceInput.addEventListener('input', () => {
   userPriceInput.reportValidity();
 });
 
-const userTypeSelect = newAd.querySelector('#type');
+const userTypeSelect = advertForm.querySelector('#type');
 
 userTypeSelect.addEventListener('change', (event) => {
   const valueOption = event.target.value;
@@ -45,8 +55,8 @@ userTypeSelect.addEventListener('change', (event) => {
   userPriceInput.min = LODGING_MIN_PRICE[valueOption];
 });
 
-const userRoomNumberSelect = newAd.querySelector('#room_number');
-const userCapacitySelect = newAd.querySelector('#capacity');
+const userRoomNumberSelect = advertForm.querySelector('#room_number');
+const userCapacitySelect = advertForm.querySelector('#capacity');
 userRoomNumberSelect.addEventListener('change', (event) => {
   userCapacitySelect.querySelector('[value="2"]').setAttribute('disabled', 'disabled');
   userCapacitySelect.querySelector('[value="3"]').setAttribute('disabled', 'disabled');
@@ -70,7 +80,7 @@ userRoomNumberSelect.addEventListener('change', (event) => {
   }
 });
 
-const addressForm = newAd.querySelector('#address');
+const addressForm = advertForm.querySelector('#address');
 const addAddressInput = function () {
   marker.on('moveend', (evt) => {
     const mainAddress = evt.target.getLatLng();
@@ -79,3 +89,47 @@ const addAddressInput = function () {
 };
 
 addAddressInput();
+
+const setUserFormSubmit = () => {
+  advertForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    sendData(
+      () => displayWindowSuccess(),
+      () => displayWindowError(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+const buttonResetForm = document.querySelector('.ad-form__reset');
+buttonResetForm.addEventListener('click', () => {
+  resetMarker();
+});
+
+const userTimeInSelect = advertForm.querySelector('#timein');
+const userTimeOutSelect = advertForm.querySelector('#timeout');
+userTimeInSelect.addEventListener('change', (event) => {
+  if (event.target.value === '12:00') {
+    userTimeOutSelect.value = '12:00';
+  }
+  if (event.target.value === '13:00') {
+    userTimeOutSelect.value = '13:00';
+  }
+  if (event.target.value === '14:00') {
+    userTimeOutSelect.value = '14:00';
+  }
+});
+
+userTimeOutSelect.addEventListener('change', (event) => {
+  if (event.target.value === '12:00') {
+    userTimeInSelect.value = '12:00';
+  }
+  if (event.target.value === '13:00') {
+    userTimeInSelect.value = '13:00';
+  }
+  if (event.target.value === '14:00') {
+    userTimeInSelect.value = '14:00';
+  }
+});
+
+export {setUserFormSubmit};
