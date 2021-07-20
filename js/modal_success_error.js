@@ -1,5 +1,6 @@
 import {isEscEvent} from './util.js';
 import {resetMarker} from './create-map.js';
+import {clearFilter} from './filter.js';
 
 const templateModalSuccess = document.querySelector('#success').content;
 const modalSuccess = templateModalSuccess.querySelector('div');
@@ -14,47 +15,91 @@ const displayWindowSuccess = function () {
   const newModal = modalSuccess.cloneNode(true);
   const bodyPage = document.querySelector('body');
   bodyPage.appendChild(newModal);
-  document.addEventListener('keydown', (evt) => {
+  const onKeydown = function (evt) {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
       resetMarker();
       document.querySelector('.ad-form').reset();
+      clearFilter();
+      document.removeEventListener('keydown', onKeydown);
     }
-    newModal.addEventListener('click', () => { //не работает.хрен знает почему.
-      newModal.style.display='none';
-    });
-  });
+  };
+  const onClick = function () {
+    newModal.style.display='none';
+    resetMarker();
+    document.querySelector('.ad-form').reset();
+    clearFilter();
+    document.removeEventListener('click', onClick);
+  };
+
+  document.addEventListener('keydown', onKeydown);
+  document.addEventListener('click', onClick);
+
+
+  // if (newModal.getAttribute('display') === 'none') {
+  //   document.removeEventListener('keydown', (evt) => {
+  //     if (isEscEvent(evt)) {
+  //       newModal.style.display='none';
+  //       resetMarker();
+  //       document.querySelector('.ad-form').reset();
+  //       clearFilter();
+  //     }
+  //   });
+  //   document.removeEventListener('click', () => {
+  //     newModal.style.display='none';
+  //     resetMarker();
+  //     document.querySelector('.ad-form').reset();
+  //     clearFilter();
+  //   });
+
+
+  // }
 };
 
 const displayWindowError = function () {
   const newModal = modalError.cloneNode(true);
   const bodyPage = document.querySelector('body');
-  bodyPage.appendChild(newModal);
-
   const buttonClose = newModal.querySelector('.error__button');
-  buttonClose.addEventListener('click', () => {
-    newModal.style.display='none';
-  });
-  document.addEventListener('keydown', (evt) => {
+  bodyPage.appendChild(newModal);
+  const onButton = function () {
+    buttonClose.addEventListener('click', () => {
+      newModal.style.display='none';
+    });
+    document.removeEventListener('click', onButton);
+  };
+  const onKeydown = function (evt) {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
+      document.removeEventListener('keydown', onKeydown);
     }
-  });
+  };
+  const onClick = function () {
+    newModal.style.display='none';
+    document.removeEventListener('click', onClick);
+  };
+
+  document.addEventListener('keydown', onKeydown);
+  document.addEventListener('click', onClick);
+  document.addEventListener('click', onButton);
 };
 
 const displayWindowErrorServer = function () {
   const newModal = modalErrorServer.cloneNode(true);
   const bodyPage = document.querySelector('body');
   bodyPage.appendChild(newModal);
-
-  document.addEventListener('click', () => {
-    newModal.style.display='none';
-  });
-  document.addEventListener('keydown', (evt) => {
+  const onKeydown = function (evt) {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
+      document.removeEventListener('keydown', onKeydown);
     }
-  });
+  };
+  const onClick = function () {
+    newModal.style.display='none';
+    document.removeEventListener('click', onClick);
+  };
+
+  document.addEventListener('keydown', onKeydown);
+  document.addEventListener('click', onClick);
 };
 
 export {displayWindowSuccess, displayWindowError, displayWindowErrorServer};

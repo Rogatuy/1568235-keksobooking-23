@@ -4,18 +4,16 @@ import './similar-elements.js';
 import './create-map.js';
 import './pre-load.js';
 import {setUserFormSubmit} from './form.js';
-import {createMarker} from './create-map.js';
 import {getData} from './api.js';
+import './preview-photo.js';
+import {displayWindowErrorServer} from './modal_success_error.js';
+import './filter.js';
+// import {advertsToMarkers} from './create-map.js';
+import {mainRenderPoints} from './filter.js';
 
-
-const SIMILAR_CARD_COUNT = 10;
-
-getData((adverts) => {
-  const sliceAdverts = adverts.slice(0, SIMILAR_CARD_COUNT);
-  sliceAdverts.forEach((point) => {
-    createMarker(point);
-  });
-});
-
+getData (
+  (adverts) => mainRenderPoints(adverts),
+  () => displayWindowErrorServer(),
+);
 
 setUserFormSubmit();
