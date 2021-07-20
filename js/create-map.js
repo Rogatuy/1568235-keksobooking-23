@@ -99,11 +99,21 @@ const createCustomPopup = (point) => {
     popupElement.querySelector('.popup__text--time').remove();
   }
 
+  const addFeaturesInPopup = function (arrayFeatures) {
+    const featuresBlockPopup = popupElement.querySelector('.popup__features');
+    for (let i = 0; i < arrayFeatures.length; i++) {
+      const classOfLi = `popup__feature--${  arrayFeatures[i]}`;
+      const featuresBlock = featuresBlockPopup.querySelector(`.${  classOfLi}`);
+      featuresBlock.style.display = 'inline-block';
+    }
+  };
+
   if (typeof point.offer['features'] !== 'undefined') {
-    popupElement.querySelector('.popup__features').textContent = point.offer.features.join(', ');
+    addFeaturesInPopup(point.offer.features);
   }else {
     popupElement.querySelector('.popup__features').remove();
   }
+
 
   popupElement.querySelector('.popup__description').textContent = point.offer.description;
   popupElement.querySelector('.popup__avatar').src = point.author.avatar;
@@ -148,4 +158,11 @@ const createMarker = (point) => {
     );
 };
 
-export {createMarker, createCustomPopup, resetMarker};
+const advertsToMarkers = function (adverts) {
+  const sliceAdverts = adverts.slice();
+  sliceAdverts.forEach((point) => {
+    createMarker(point);
+  });
+};
+
+export {createMarker, resetMarker, advertsToMarkers, markerGroup};

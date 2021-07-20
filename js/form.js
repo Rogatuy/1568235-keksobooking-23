@@ -1,6 +1,7 @@
 import {marker, resetMarker} from './create-map.js';
 import {displayWindowSuccess, displayWindowError} from './modal_success_error.js';
 import {sendData} from './api.js';
+import {clearFilter} from './filter.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -104,6 +105,7 @@ const setUserFormSubmit = () => {
 const buttonResetForm = document.querySelector('.ad-form__reset');
 buttonResetForm.addEventListener('click', () => {
   resetMarker();
+  clearFilter();
 });
 
 const userTimeInSelect = advertForm.querySelector('#timein');
