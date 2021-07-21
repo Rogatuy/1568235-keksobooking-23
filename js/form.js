@@ -104,6 +104,8 @@ const setUserFormSubmit = () => {
 
 const buttonResetForm = document.querySelector('.ad-form__reset');
 buttonResetForm.addEventListener('click', () => {
+  const placeholderPrice = document.querySelector('#price');
+  placeholderPrice.setAttribute('placeholder', '1000');
   resetMarker();
   clearFilter();
 });
