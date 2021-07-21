@@ -21,6 +21,8 @@ const displayWindowSuccess = function () {
       resetMarker();
       document.querySelector('.ad-form').reset();
       clearFilter();
+      const placeholderPrice = document.querySelector('#price');
+      placeholderPrice.setAttribute('placeholder', '1000');
       document.removeEventListener('keydown', onKeydown);
     }
   };
@@ -29,31 +31,13 @@ const displayWindowSuccess = function () {
     resetMarker();
     document.querySelector('.ad-form').reset();
     clearFilter();
+    const placeholderPrice = document.querySelector('#price');
+    placeholderPrice.setAttribute('placeholder', '1000');
     document.removeEventListener('click', onClick);
   };
 
   document.addEventListener('keydown', onKeydown);
   document.addEventListener('click', onClick);
-
-
-  // if (newModal.getAttribute('display') === 'none') {
-  //   document.removeEventListener('keydown', (evt) => {
-  //     if (isEscEvent(evt)) {
-  //       newModal.style.display='none';
-  //       resetMarker();
-  //       document.querySelector('.ad-form').reset();
-  //       clearFilter();
-  //     }
-  //   });
-  //   document.removeEventListener('click', () => {
-  //     newModal.style.display='none';
-  //     resetMarker();
-  //     document.querySelector('.ad-form').reset();
-  //     clearFilter();
-  //   });
-
-
-  // }
 };
 
 const displayWindowError = function () {

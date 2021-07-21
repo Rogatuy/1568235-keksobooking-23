@@ -56,7 +56,7 @@ const resetMarker = function () {
     lat: 35.6894,
     lng: 139.692,
   }, 10);
-  addressForm.value = `${marker.getLatLng().lat  }, ${  marker.getLatLng().lng}`;
+  addressForm.setAttribute('value',`${marker.getLatLng().lat  }, ${  marker.getLatLng().lng}`);
 };
 
 const createCustomPopup = (point) => {

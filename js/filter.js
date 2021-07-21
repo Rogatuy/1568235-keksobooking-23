@@ -52,7 +52,7 @@ const compareAdvert = function (placeA, placeB) {
   return rankB - rankA;
 };
 
-const filterFeatures = function (offer) {
+const getFilterFeatures = function (offer) {
   const chooseAdvert = filtersMap.querySelectorAll('.map__checkbox:checked');
   chooseAdvert.forEach((element) => {
     if (!offer.includes(element.name)) {
@@ -62,7 +62,7 @@ const filterFeatures = function (offer) {
   return true;
 };
 
-const filtersAll = function (advert) {
+const getFiltersAll = function (advert) {
   const housingAdvert = typeOfAdvert.value;
   const roomsAdvert = roomsOfAdvert.value;
   const guestsAdvert = guestsOfAdvert.value;
@@ -75,16 +75,16 @@ const filtersAll = function (advert) {
     compareValues(offer.rooms, roomsAdvert) &&
     compareValues(offer.guests, guestsAdvert) &&
     getPriceFilter(priceAdvert, offer.price) &&
-    compareValuesFeatures(offer.features, filterFeatures));
+    compareValuesFeatures(offer.features, getFilterFeatures));
 };
 
 const mainRenderPoints = function (advert) {
   advertsToMarkers(advert.slice(0, SIMILAR_PLACE_COUNT));
   filtersMap.addEventListener('change', () => {
-    filtersAll(advert);
+    getFiltersAll(advert);
     const clearMarkerPoints = function () {
       markerGroup.clearLayers();
-      advertsToMarkers(filtersAll(advert).sort(compareAdvert).slice(0, SIMILAR_PLACE_COUNT));
+      advertsToMarkers(getFiltersAll(advert).sort(compareAdvert).slice(0, SIMILAR_PLACE_COUNT));
     };
     const debounceClearMarkerPoints = debounce(() => clearMarkerPoints(advert));
     debounceClearMarkerPoints();

@@ -1,4 +1,4 @@
-const getData = (onSuccess, onFail) => {
+const getData = function (onSuccess, onFail)  {
   fetch('https://23.javascript.pages.academy/keksobooking/data')
     .then((response) => {
       if (response.ok) {
@@ -16,7 +16,7 @@ const getData = (onSuccess, onFail) => {
 };
 
 
-const sendData = (onSuccess, onFail, body) => {
+const sendData = function (onSuccess, onFail, body) {
   fetch(
     'https://23.javascript.pages.academy/keksobooking',
     {
