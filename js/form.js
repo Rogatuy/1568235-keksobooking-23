@@ -1,7 +1,8 @@
 import {marker, resetMarker} from './create-map.js';
-import {displayWindowSuccess, displayWindowError} from './modal_success_error.js';
+import {displayWindowSuccess, displayWindowError} from './modal-success-error.js';
 import {sendData} from './api.js';
 import {clearFilter} from './filter.js';
+import {clearPhoto} from './preview-photo.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -14,6 +15,7 @@ const LODGING_MIN_PRICE = {
   palace: 10000,
 };
 
+const pricePlaceholderDefault = 1000;
 const advertForm = document.querySelector('.ad-form');
 
 const getPictures = function (picture) {
@@ -59,27 +61,65 @@ userTypeSelect.addEventListener('change', (event) => {
 const userRoomNumberSelect = advertForm.querySelector('#room_number');
 const userCapacitySelect = advertForm.querySelector('#capacity');
 userRoomNumberSelect.addEventListener('change', (event) => {
-  userCapacitySelect.querySelector('[value="2"]').setAttribute('disabled', 'disabled');
-  userCapacitySelect.querySelector('[value="3"]').setAttribute('disabled', 'disabled');
-  userCapacitySelect.querySelector('[value="0"]').setAttribute('disabled', 'disabled');
-  userCapacitySelect.querySelector('[value="1"]').setAttribute('disabled', 'disabled');
-
-  if (event.target.value === '1') {
-    userCapacitySelect.querySelector('[value="1"]').removeAttribute('disabled', 'disabled');
-  }
-  if (event.target.value === '2') {
-    userCapacitySelect.querySelector('[value="2"]').removeAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="1"]').removeAttribute('disabled', 'disabled');
-  }
-  if (event.target.value === '3') {
-    userCapacitySelect.querySelector('[value="2"]').removeAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="3"]').removeAttribute('disabled', 'disabled');
-    userCapacitySelect.querySelector('[value="1"]').removeAttribute('disabled', 'disabled');
-  }
-  if (event.target.value === '100') {
-    userCapacitySelect.querySelector('[value="0"]').removeAttribute('disabled', 'disabled');
+  const optionsAdvertForm = userCapacitySelect.querySelectorAll('option');
+  optionsAdvertForm.forEach((element) => {
+    element.setAttribute('disabled', 'disabled');
+  });
+  if (event.target.value > 3) {
+    userCapacitySelect.value = 0;
+    const targetOption = userCapacitySelect.querySelector('option[value="0"]');
+    targetOption.removeAttribute('disabled');
+  } else {
+    userCapacitySelect.value = event.target.value;
+    for (let i = 1; i <= 3; i++) {
+      if (i >= event.target.value) {
+        const targetOptionCapacity = userCapacitySelect.querySelector('option[value = "i"]'); //с количеством комнат и гостями разобрался. но тут он i не берет, не понимаю почему. цифру берет, а i нет.
+        targetOptionCapacity.removeAttribute('disabled');
+      }
+    }
   }
 });
+//   const userCapacitySelectZero = userCapacitySelect.querySelector('[value="0"]');
+//   const userCapacitySelectOne = userCapacitySelect.querySelector('[value="1"]');
+//   const userCapacitySelectTwo = userCapacitySelect.querySelector('[value="2"]');
+//   const userCapacitySelectThree = userCapacitySelect.querySelector('[value="3"]');
+
+//   userCapacitySelectZero.setAttribute('disabled', 'disabled');
+//   userCapacitySelectOne.setAttribute('disabled', 'disabled');
+//   userCapacitySelectTwo.setAttribute('disabled', 'disabled');
+//   userCapacitySelectThree.setAttribute('disabled', 'disabled');
+
+//   const resetSelected = function () {
+//     userCapacitySelectOne.removeAttribute('selected');
+//     userCapacitySelectTwo.removeAttribute('selected');
+//     userCapacitySelectThree.removeAttribute('selected');
+//     userCapacitySelectZero.removeAttribute('selected');
+//   };
+
+//   if (event.target.value === '1') {
+//     userCapacitySelectOne.removeAttribute('disabled');
+//     resetSelected();
+//     userCapacitySelectOne.setAttribute('selected', 'selected');
+//   }
+//   if (event.target.value === '2') {
+//     userCapacitySelectTwo.removeAttribute('disabled');
+//     userCapacitySelectOne.removeAttribute('disabled');
+//     resetSelected();
+//     userCapacitySelectTwo.setAttribute('selected', 'selected');
+//   }
+//   if (event.target.value === '3') {
+//     userCapacitySelectTwo.removeAttribute('disabled');
+//     userCapacitySelectOne.removeAttribute('disabled');
+//     userCapacitySelectThree.removeAttribute('disabled');
+//     resetSelected();
+//     userCapacitySelectThree.setAttribute('selected', 'selected');
+//   }
+//   if (event.target.value === '100') {
+//     userCapacitySelectZero.removeAttribute('disabled');
+//     resetSelected();
+//     userCapacitySelectZero.setAttribute('selected', 'selected');
+//   }
+// });
 
 const addressForm = advertForm.querySelector('#address');
 const addAddressInput = function () {
@@ -91,7 +131,7 @@ const addAddressInput = function () {
 
 addAddressInput();
 
-const setUserFormSubmit = () => {
+const setUserFormSubmit = function () {
   advertForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
@@ -104,36 +144,25 @@ const setUserFormSubmit = () => {
 
 const buttonResetForm = document.querySelector('.ad-form__reset');
 buttonResetForm.addEventListener('click', () => {
-  const placeholderPrice = document.querySelector('#price');
-  placeholderPrice.setAttribute('placeholder', '1000');
+  userPriceInput.setAttribute('placeholder', pricePlaceholderDefault);
   resetMarker();
   clearFilter();
+  clearPhoto();
 });
 
 const userTimeInSelect = advertForm.querySelector('#timein');
 const userTimeOutSelect = advertForm.querySelector('#timeout');
+
+const changeTimeInput = function (event, userTimeSelect) {
+  userTimeSelect.value = event.target.value;
+};
+
 userTimeInSelect.addEventListener('change', (event) => {
-  if (event.target.value === '12:00') {
-    userTimeOutSelect.value = '12:00';
-  }
-  if (event.target.value === '13:00') {
-    userTimeOutSelect.value = '13:00';
-  }
-  if (event.target.value === '14:00') {
-    userTimeOutSelect.value = '14:00';
-  }
+  changeTimeInput(event, userTimeOutSelect);
 });
 
 userTimeOutSelect.addEventListener('change', (event) => {
-  if (event.target.value === '12:00') {
-    userTimeInSelect.value = '12:00';
-  }
-  if (event.target.value === '13:00') {
-    userTimeInSelect.value = '13:00';
-  }
-  if (event.target.value === '14:00') {
-    userTimeInSelect.value = '14:00';
-  }
+  changeTimeInput(event, userTimeInSelect);
 });
 
 export {setUserFormSubmit};

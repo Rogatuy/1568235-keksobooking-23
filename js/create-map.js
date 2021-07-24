@@ -1,4 +1,7 @@
+import { getData } from './api.js';
 import {preloadDisabledRemove} from './pre-load.js';
+import {displayWindowErrorServer} from './modal-success-error.js';
+import {mainRenderPoints} from './filter.js';
 
 const LODGING_TYPE = {
   flat: 'Квартира',
@@ -8,11 +11,25 @@ const LODGING_TYPE = {
   hotel: 'Отель',
 };
 
+const mainPinIconSetting = {
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+};
+
+const mainPinCoordinates = {
+  lat: 35.68940,
+  lng: 139.69200,
+};
+
+const smallPinIconSetting = {
+  iconUrl: 'img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+};
+
 const map = L.map('map-canvas')
-  .setView ({
-    lat: 35.6894,
-    lng: 139.692,
-  }, 10);
+  .setView (mainPinCoordinates, 10);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -21,19 +38,18 @@ L.tileLayer(
   },
 ).addTo(map);
 
-map.onload = preloadDisabledRemove();
+map.onload = function () {
+  getData (
+    (adverts) => mainRenderPoints(adverts),
+    () => displayWindowErrorServer(),
+  );
+  preloadDisabledRemove();
+};
 
-const mainPinIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
-  iconSize: [52, 52],
-  iconAnchor: [26, 52],
-});
+const mainPinIcon = L.icon(mainPinIconSetting);
 
 const marker = L.marker(
-  {
-    lat: 35.6894,
-    lng: 139.692,
-  },
+  mainPinCoordinates,
   {
     draggable: true,
     icon: mainPinIcon,
@@ -44,56 +60,50 @@ marker.addTo(map);
 export {marker};
 
 const addressForm = document.querySelector('#address');
-addressForm.value = `${marker.getLatLng().lat  }, ${  marker.getLatLng().lng}`;
+addressForm.value = `${mainPinCoordinates.lat.toFixed(5)  }, ${  mainPinCoordinates.lng.toFixed(5)}`;
 
 const resetMarker = function () {
-  marker.setLatLng({
-    lat: 35.6894,
-    lng: 139.692,
-  });
+  marker.setLatLng(mainPinCoordinates);
 
-  map.setView({
-    lat: 35.6894,
-    lng: 139.692,
-  }, 10);
-  addressForm.setAttribute('value',`${marker.getLatLng().lat  }, ${  marker.getLatLng().lng}`);
+  map.setView(mainPinCoordinates, 10);
+  addressForm.setAttribute('value',`${mainPinCoordinates.lat.toFixed(5)  }, ${  mainPinCoordinates.lng.toFixed(5) }`);
 };
 
-const createCustomPopup = (point) => {
+const createCustomPopup = function (point) {
   const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
   const popupElement = balloonTemplate.cloneNode(true);
 
-  if (typeof point.offer['title'] !== 'undefined') {
+  if (point.offer['title']) {
     popupElement.querySelector('.popup__title').textContent = point.offer.title;
   }else {
     popupElement.querySelector('.popup__title').remove();
   }
 
-  if (typeof point.offer['address'] !== 'undefined') {
+  if (point.offer['address']) {
     popupElement.querySelector('.popup__text--address').textContent = point.offer.address;
   }else {
     popupElement.querySelector('.popup__text--address').remove();
   }
 
-  if (typeof point.offer['price'] !== 'undefined') {
+  if (point.offer['price']) {
     popupElement.querySelector('.popup__text--price').textContent =  `${point.offer.price  }₽/ночь`;
   }else {
     popupElement.querySelector('.popup__text--price').remove();
   }
 
-  if (typeof point.offer['type'] !== 'undefined') {
+  if (point.offer['type']) {
     popupElement.querySelector('.popup__type').textContent = LODGING_TYPE[point.offer.type];
   }else {
     popupElement.querySelector('.popup__type').remove();
   }
 
-  if (typeof point.offer['rooms'] !== 'undefined' && typeof point.offer['guests'] !== 'undefined') {
+  if (point.offer['rooms'] && point.offer['guests']) {
     popupElement.querySelector('.popup__text--capacity').textContent =  `${point.offer.rooms  } комнаты для ${  point.offer.guests  } гостей`;
   }else {
     popupElement.querySelector('.popup__text--capacity').remove();
   }
 
-  if (typeof point.offer['checkin'] !== 'undefined' && typeof point.offer['checkout'] !== 'undefined') {
+  if (point.offer['checkin'] && point.offer['checkout']) {
     popupElement.querySelector('.popup__text--time').textContent = `Заезд после ${  point.offer.checkin  }, выезд до ${  point.offer.checkout}`;
   }else {
     popupElement.querySelector('.popup__text--time').remove();
@@ -101,14 +111,14 @@ const createCustomPopup = (point) => {
 
   const addFeaturesInPopup = function (arrayFeatures) {
     const featuresBlockPopup = popupElement.querySelector('.popup__features');
-    for (let i = 0; i < arrayFeatures.length; i++) {
-      const classOfLi = `popup__feature--${  arrayFeatures[i]}`;
+    for (const elementOfFeatures of arrayFeatures) {
+      const classOfLi = `popup__feature--${  elementOfFeatures}`;
       const featuresBlock = featuresBlockPopup.querySelector(`.${  classOfLi}`);
       featuresBlock.style.display = 'inline-block';
     }
   };
 
-  if (typeof point.offer['features'] !== 'undefined') {
+  if (point.offer['features']) {
     addFeaturesInPopup(point.offer.features);
   }else {
     popupElement.querySelector('.popup__features').remove();
@@ -120,9 +130,9 @@ const createCustomPopup = (point) => {
 
   const photos = popupElement.querySelector('.popup__photos');
   const imageLodging = photos.querySelector('img');
-  if (typeof point.offer['photos'] !== 'undefined') {
-    for (let i = 0; i < point.offer.photos.length; i++) {
-      imageLodging.src = point.offer.photos[i];
+  if (point.offer['photos']) {
+    for (const photosElement of point.offer.photos) {
+      imageLodging.src = photosElement;
       photos.appendChild(imageLodging);
     }
   } else {
@@ -133,13 +143,9 @@ const createCustomPopup = (point) => {
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const createMarker = (point) => {
+const createMarker = function (point) {
   const {lat, lng} = point.location;
-  const icon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
+  const icon = L.icon(smallPinIconSetting);
   const markerForLodging = L.marker({
     lat,
     lng,

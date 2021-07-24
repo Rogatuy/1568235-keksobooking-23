@@ -1,12 +1,12 @@
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-
+const previewPhotoHeight = 44;
 const avatarChooser = document.querySelector('.ad-form-header__input');
 const avatarPreview = document.querySelector('.ad-form-header__preview img');
 const photoChooser = document.querySelector('.ad-form__input');
 const blockPreview = document.querySelector('.ad-form__photo');
 const photoPreview = document.createElement('img');
 blockPreview.classList.add('ad-form-header__preview');
-photoPreview.setAttribute('height', '44px');
+photoPreview.setAttribute('height', previewPhotoHeight);
 blockPreview.append(photoPreview);
 
 
@@ -31,3 +31,10 @@ const previewsPhoto = function (fileChooser, preview) {
 
 previewsPhoto(avatarChooser, avatarPreview);
 previewsPhoto(photoChooser, photoPreview);
+
+const clearPhoto = function () {
+  avatarPreview.src = 'img/muffin-grey.svg';
+  photoPreview.src = '';
+};
+
+export {clearPhoto};
