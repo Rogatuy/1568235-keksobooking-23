@@ -1,6 +1,7 @@
 import {isEscEvent} from './util.js';
 import {resetMarker} from './create-map.js';
 import {clearFilter} from './filter.js';
+import {clearPhoto} from './preview-photo.js';
 
 const templateModalSuccess = document.querySelector('#success').content;
 const modalSuccess = templateModalSuccess.querySelector('div');
@@ -21,9 +22,11 @@ const displayWindowSuccess = function () {
       resetMarker();
       document.querySelector('.ad-form').reset();
       clearFilter();
+      clearPhoto();
       const placeholderPrice = document.querySelector('#price');
       placeholderPrice.setAttribute('placeholder', '1000');
       document.removeEventListener('keydown', onKeydown);
+      document.removeEventListener('click', onClick);
     }
   };
   const onClick = function () {
@@ -31,9 +34,11 @@ const displayWindowSuccess = function () {
     resetMarker();
     document.querySelector('.ad-form').reset();
     clearFilter();
+    clearPhoto();
     const placeholderPrice = document.querySelector('#price');
     placeholderPrice.setAttribute('placeholder', '1000');
     document.removeEventListener('click', onClick);
+    document.removeEventListener('keydown', onKeydown);
   };
 
   document.addEventListener('keydown', onKeydown);
@@ -81,7 +86,6 @@ const displayWindowErrorServer = function () {
     newModal.style.display='none';
     document.removeEventListener('click', onClick);
   };
-
   document.addEventListener('keydown', onKeydown);
   document.addEventListener('click', onClick);
 };

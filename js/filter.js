@@ -1,8 +1,7 @@
 import {debounce} from './utils/debounce.js';
 import {markerGroup, advertsToMarkers} from './create-map.js';
 import {getData} from './api.js';
-import {displayWindowErrorServer} from './modal_success_error.js';
-
+import {displayWindowErrorServer} from './modal-success-error.js';
 
 const PRICE_MIN_MAX = {
   MIN: 10000,
@@ -14,13 +13,13 @@ const SIMILAR_PLACE_COUNT = 10;
 
 const filtersCheckboxes = document.querySelectorAll('.map__checkbox');
 const filtersMap = document.querySelector('.map__filters');
-const typeOfAdvert = document.querySelector('#housing-type');
-const priceOfAdvert = document.querySelector('#housing-price');
-const roomsOfAdvert = document.querySelector('#housing-rooms');
-const guestsOfAdvert = document.querySelector('#housing-guests');
+const typeOfElement = document.querySelector('#housing-type');
+const priceOfElement = document.querySelector('#housing-price');
+const roomsOfElement = document.querySelector('#housing-rooms');
+const guestsOfElement = document.querySelector('#housing-guests');
 
 
-const getPriceFilter = (key, price) => {
+const getPriceFilter = function (key, price) {
   switch (key) {
     case 'any':
       return true;
@@ -62,41 +61,46 @@ const getFilterFeatures = function (offer) {
   return true;
 };
 
-const getFiltersAll = function (advert) {
-  const housingAdvert = typeOfAdvert.value;
-  const roomsAdvert = roomsOfAdvert.value;
-  const guestsAdvert = guestsOfAdvert.value;
-  const priceAdvert = priceOfAdvert.value;
+const getFiltersAll = function (adverts) {
+  const housingAdvert = typeOfElement.value;
+  const roomsAdvert = roomsOfElement.value;
+  const guestsAdvert = guestsOfElement.value;
+  const priceAdvert = priceOfElement.value;
   const compareValues = (offerValue, filterValue) => filterValue === 'any' ? true : String(offerValue) === filterValue;
   const compareValuesFeatures = (features, cb) => features === undefined ? false : cb;
 
-  return advert.filter(({offer}) =>
-    compareValues(offer.type, housingAdvert) &&
-    compareValues(offer.rooms, roomsAdvert) &&
-    compareValues(offer.guests, guestsAdvert) &&
-    getPriceFilter(priceAdvert, offer.price) &&
-    compareValuesFeatures(offer.features, getFilterFeatures));
+  const newAdverts = [];
+  for (let i = 0; newAdverts.length < 10 || i < adverts.length - 1; i++) {
+    const offer = adverts[i];
+    console.log(offer);
+    if (
+      compareValues(offer.type, housingAdvert) &&
+      compareValues(offer.rooms, roomsAdvert) &&
+      compareValues(offer.guests, guestsAdvert) &&
+      getPriceFilter(priceAdvert, offer.price) &&
+      compareValuesFeatures(offer.features, getFilterFeatures)
+    ) {
+      newAdverts.push(offer);
+    }}
+  return newAdverts;
 };
 
-const mainRenderPoints = function (advert) {
-  advertsToMarkers(advert.slice(0, SIMILAR_PLACE_COUNT));
+
+const mainRenderPoints = function (adverts) {
+  advertsToMarkers(adverts.slice(0, SIMILAR_PLACE_COUNT));
   filtersMap.addEventListener('change', () => {
-    getFiltersAll(advert);
+    getFiltersAll(adverts);
     const clearMarkerPoints = function () {
       markerGroup.clearLayers();
-      advertsToMarkers(getFiltersAll(advert).sort(compareAdvert).slice(0, SIMILAR_PLACE_COUNT));
+      advertsToMarkers(getFiltersAll(adverts).sort(compareAdvert).slice(0, SIMILAR_PLACE_COUNT));
     };
-    const debounceClearMarkerPoints = debounce(() => clearMarkerPoints(advert));
+    const debounceClearMarkerPoints = debounce(() => clearMarkerPoints(adverts));
     debounceClearMarkerPoints();
   });
 };
 
 const clearFilter = function () {
-  typeOfAdvert.value = 'any';
-  priceOfAdvert.value = 'any';
-  roomsOfAdvert.value = 'any';
-  guestsOfAdvert.value = 'any';
-  filtersCheckboxes.forEach((checkbox) => checkbox.checked = false);
+  filtersMap.reset();
   getData(
     (places) => mainRenderPoints(places),
     () => displayWindowErrorServer,
