@@ -10,7 +10,7 @@ photoPreview.setAttribute('height', previewPhotoHeight);
 blockPreview.append(photoPreview);
 
 
-const previewsPhoto = function (fileChooser, preview) {
+const previewsPhoto = (fileChooser, preview) => {
   fileChooser.addEventListener('change', () => {
     const file = fileChooser.files[0];
     const fileName = file.name.toLowerCase();
@@ -32,7 +32,7 @@ const previewsPhoto = function (fileChooser, preview) {
 previewsPhoto(avatarChooser, avatarPreview);
 previewsPhoto(photoChooser, photoPreview);
 
-const clearPhoto = function () {
+const clearPhoto = () => {
   avatarPreview.src = 'img/muffin-grey.svg';
   photoPreview.src = '';
 };

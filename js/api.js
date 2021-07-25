@@ -1,7 +1,7 @@
 const adressImport = 'https://23.javascript.pages.academy/keksobooking';
 const adressExport = 'https://23.javascript.pages.academy/keksobooking/data';
 
-const getData = function (onSuccess, onFail)  {
+const getData = (onSuccess, onFail) =>  {
   fetch(adressExport)
     .then((response) => {
       if (response.ok) {
@@ -19,7 +19,7 @@ const getData = function (onSuccess, onFail)  {
 };
 
 
-const sendData = function (onSuccess, onFail, body) {
+const sendData = (onSuccess, onFail, body) => {
   fetch(
     adressImport,
     {

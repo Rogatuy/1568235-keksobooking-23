@@ -1,5 +1,5 @@
 import {marker, resetMarker} from './create-map.js';
-import {displayWindowSuccess, displayWindowError} from './modal-success-error.js';
+import {displayWindowSuccess, displayWindowError, resetFormRooms} from './modal-success-error.js';
 import {sendData} from './api.js';
 import {clearFilter} from './filter.js';
 import {clearPhoto} from './preview-photo.js';
@@ -18,7 +18,7 @@ const LODGING_MIN_PRICE = {
 const pricePlaceholderDefault = 1000;
 const advertForm = document.querySelector('.ad-form');
 
-const getPictures = function (picture) {
+const getPictures = (picture) => {
   const pictureInput = advertForm.querySelector(picture);
   pictureInput.setAttribute('accept', 'image/png, image/jpeg');
 };
@@ -72,57 +72,16 @@ userRoomNumberSelect.addEventListener('change', (event) => {
   } else {
     userCapacitySelect.value = event.target.value;
     for (let i = 1; i <= 3; i++) {
-      if (i >= event.target.value) {
-        const targetOptionCapacity = userCapacitySelect.querySelector('option[value = "i"]'); //с количеством комнат и гостями разобрался. но тут он i не берет, не понимаю почему. цифру берет, а i нет.
+      if (i <= event.target.value) {
+        const targetOptionCapacity = userCapacitySelect.querySelector(`option[value='${i}']`);
         targetOptionCapacity.removeAttribute('disabled');
       }
     }
   }
 });
-//   const userCapacitySelectZero = userCapacitySelect.querySelector('[value="0"]');
-//   const userCapacitySelectOne = userCapacitySelect.querySelector('[value="1"]');
-//   const userCapacitySelectTwo = userCapacitySelect.querySelector('[value="2"]');
-//   const userCapacitySelectThree = userCapacitySelect.querySelector('[value="3"]');
-
-//   userCapacitySelectZero.setAttribute('disabled', 'disabled');
-//   userCapacitySelectOne.setAttribute('disabled', 'disabled');
-//   userCapacitySelectTwo.setAttribute('disabled', 'disabled');
-//   userCapacitySelectThree.setAttribute('disabled', 'disabled');
-
-//   const resetSelected = function () {
-//     userCapacitySelectOne.removeAttribute('selected');
-//     userCapacitySelectTwo.removeAttribute('selected');
-//     userCapacitySelectThree.removeAttribute('selected');
-//     userCapacitySelectZero.removeAttribute('selected');
-//   };
-
-//   if (event.target.value === '1') {
-//     userCapacitySelectOne.removeAttribute('disabled');
-//     resetSelected();
-//     userCapacitySelectOne.setAttribute('selected', 'selected');
-//   }
-//   if (event.target.value === '2') {
-//     userCapacitySelectTwo.removeAttribute('disabled');
-//     userCapacitySelectOne.removeAttribute('disabled');
-//     resetSelected();
-//     userCapacitySelectTwo.setAttribute('selected', 'selected');
-//   }
-//   if (event.target.value === '3') {
-//     userCapacitySelectTwo.removeAttribute('disabled');
-//     userCapacitySelectOne.removeAttribute('disabled');
-//     userCapacitySelectThree.removeAttribute('disabled');
-//     resetSelected();
-//     userCapacitySelectThree.setAttribute('selected', 'selected');
-//   }
-//   if (event.target.value === '100') {
-//     userCapacitySelectZero.removeAttribute('disabled');
-//     resetSelected();
-//     userCapacitySelectZero.setAttribute('selected', 'selected');
-//   }
-// });
 
 const addressForm = advertForm.querySelector('#address');
-const addAddressInput = function () {
+const addAddressInput = () => {
   marker.on('moveend', (evt) => {
     const mainAddress = evt.target.getLatLng();
     addressForm.value = `${mainAddress.lat.toFixed(5)  }, ${  mainAddress.lng.toFixed(5)}`;
@@ -131,7 +90,7 @@ const addAddressInput = function () {
 
 addAddressInput();
 
-const setUserFormSubmit = function () {
+const setUserFormSubmit = () => {
   advertForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
@@ -148,12 +107,13 @@ buttonResetForm.addEventListener('click', () => {
   resetMarker();
   clearFilter();
   clearPhoto();
+  resetFormRooms();
 });
 
 const userTimeInSelect = advertForm.querySelector('#timein');
 const userTimeOutSelect = advertForm.querySelector('#timeout');
 
-const changeTimeInput = function (event, userTimeSelect) {
+const changeTimeInput = (event, userTimeSelect) => {
   userTimeSelect.value = event.target.value;
 };
 
