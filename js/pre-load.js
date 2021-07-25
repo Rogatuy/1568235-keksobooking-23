@@ -2,6 +2,10 @@ const advertForm = document.querySelector('.ad-form');
 const advertFormHeader = advertForm.querySelector('.ad-form-header');
 const advertFormElements = advertForm.querySelectorAll('.ad-form__element');
 
+const elementDisabled = (element, status) =>  {
+  element.disabled = status;
+};
+
 const advertFormDisabled = () => {
   advertForm.classList.add('ad-form--disabled');
   advertFormHeader.setAttribute('disabled', 'disabled');

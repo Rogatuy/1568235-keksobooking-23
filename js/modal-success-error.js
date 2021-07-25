@@ -12,37 +12,42 @@ const modalError = templateModalError.querySelector('div');
 const templateModalErrorServer = document.querySelector('#error-server').content;
 const modalErrorServer = templateModalErrorServer.querySelector('div');
 
-const valueOfCapacityDefault = 1;
+const disabledCapacityOptions = [];
+let notDisabledCapacityOption = null;
+const selectFormCapacity = document.querySelector('#capacity');
+const optionFormCapacity = selectFormCapacity.querySelectorAll('option');
 
-const disabledCapacityOptions = [2, 3, 100];
+for (let i = 0; i < optionFormCapacity.length; i++ ) {
+  if (optionFormCapacity[i].hasAttribute('selected')) {
+    notDisabledCapacityOption = optionFormCapacity[i].value;
+  } else {
+    disabledCapacityOptions.push(optionFormCapacity[i].value);
+  }
+}
+
 
 const resetFormRooms = () => {
-  const selectFormCapacity = document.querySelector('#capacity');
-  const optionFormCapacity = selectFormCapacity.querySelectorAll('option');
-  disabledCapacityOptions.forEach((element) => {
-    for (let i = 0; i <=optionFormCapacity.length; i++ )
-    {if (optionFormCapacity[i].value === element) {
-      optionFormCapacity[i].setAttribute('disabled', 'disabled');
-    } else {
-      optionFormCapacity[i].removeAttribute('disabled');
-    }}
-  });
-
-  optionFormCapacity.value = valueOfCapacityDefault;
-  // for (let i = 2; i <= 3; i++) {
-  //   if (i <= event.target.value) {
-  //     const targetOptionCapacity = userCapacitySelect.querySelector(`option[value='${i}']`);
-  //     targetOptionCapacity.removeAttribute('disabled');
-  //   }
-
-
+  for (let i = 0; i < optionFormCapacity.length; i++ ) {
+    disabledCapacityOptions.forEach((item) => {
+      if (optionFormCapacity[i].value === `${item}`) {
+        optionFormCapacity[i].setAttribute('disabled', 'disabled');
+      }
+      if (optionFormCapacity[i].value === `${notDisabledCapacityOption}`) {
+        optionFormCapacity[i].removeAttribute('disabled');}
+    });
+  }
 };
 
 const displayWindowSuccess = () => {
   const newModal = modalSuccess.cloneNode(true);
   const bodyPage = document.querySelector('body');
   bodyPage.appendChild(newModal);
-  const onKeydown = (evt) => {
+  const removeListeners = () => {
+    document.removeEventListener('keydown', onKeydown);
+    document.removeEventListener('click', onClick);
+  };
+
+  function onKeydown(evt) {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
       resetMarker();
@@ -52,46 +57,54 @@ const displayWindowSuccess = () => {
       resetFormRooms();
       const placeholderPrice = document.querySelector('#price');
       placeholderPrice.setAttribute('placeholder', '1000');
-      document.removeEventListener('keydown', onKeydown);
-      document.removeEventListener('click', onClick);
-    }
+      removeListeners();
+    };
   };
-  const onClick = () => {
+
+  function onClick() {
     newModal.style.display='none';
     resetMarker();
     document.querySelector('.ad-form').reset();
     clearFilter();
     clearPhoto();
+    resetFormRooms();
     const placeholderPrice = document.querySelector('#price');
     placeholderPrice.setAttribute('placeholder', '1000');
-    document.removeEventListener('click', onClick);
-    document.removeEventListener('keydown', onKeydown);
+    removeListeners();
   };
 
   document.addEventListener('keydown', onKeydown);
   document.addEventListener('click', onClick);
 };
 
+
 const displayWindowError = () => {
   const newModal = modalError.cloneNode(true);
   const bodyPage = document.querySelector('body');
   const buttonClose = newModal.querySelector('.error__button');
   bodyPage.appendChild(newModal);
-  const onButton = () => {
+  const removeListeners = () => {
+    document.removeEventListener('keydown', onKeydown);
+    document.removeEventListener('click', onClick);
+    document.removeEventListener('click', onButton);
+
+  function onButton() {
     buttonClose.addEventListener('click', () => {
       newModal.style.display='none';
     });
-    document.removeEventListener('click', onButton);
+    removeListeners();
   };
-  const onKeydown =  (evt) => {
+
+  function onKeydown (evt) {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
-      document.removeEventListener('keydown', onKeydown);
+      removeListeners();
     }
   };
-  const onClick = () => {
+
+  function onClick() {
     newModal.style.display='none';
-    document.removeEventListener('click', onClick);
+    removeListeners();
   };
 
   document.addEventListener('keydown', onKeydown);
@@ -103,15 +116,22 @@ const displayWindowErrorServer = () => {
   const newModal = modalErrorServer.cloneNode(true);
   const bodyPage = document.querySelector('body');
   bodyPage.appendChild(newModal);
-  const onKeydown = (evt) => {
+  const removeListeners = () => {
+    document.removeEventListener('keydown', onKeydown);
+    document.removeEventListener('click', onClick);
+  }
+
+  function onKeydown (evt) {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
       document.removeEventListener('keydown', onKeydown);
+      removeListeners();
     }
   };
-  const onClick = () => {
+  function onClick() {
     newModal.style.display='none';
     document.removeEventListener('click', onClick);
+    removeListeners();
   };
   document.addEventListener('keydown', onKeydown);
   document.addEventListener('click', onClick);
