@@ -1,7 +1,6 @@
 import {debounce} from './utils/debounce.js';
-import {markerGroup, advertsToMarkers} from './create-map.js';
-import {getData} from './api.js';
-import {displayWindowErrorServer} from './modal-success-error.js';
+import {markerGroup, advertsToMarkers, adverts} from './create-map.js';
+
 
 const PRICE_MIN_MAX = {
   MIN: 10000,
@@ -11,7 +10,6 @@ const PRICE_MIN_MAX = {
 const SIMILAR_PLACE_COUNT = 10;
 
 
-const filtersCheckboxes = document.querySelectorAll('.map__checkbox');
 const filtersMap = document.querySelector('.map__filters');
 const typeOfElement = document.querySelector('#housing-type');
 const priceOfElement = document.querySelector('#housing-price');
@@ -61,7 +59,7 @@ const getFilterFeatures = (offer) => {
   return true;
 };
 
-const getFiltersAll = (adverts) => {
+const getFiltersAll = (bestAdverts) => {
   const housingAdvert = typeOfElement.value;
   const roomsAdvert = roomsOfElement.value;
   const guestsAdvert = guestsOfElement.value;
@@ -70,9 +68,9 @@ const getFiltersAll = (adverts) => {
   const compareValuesFeatures = (features, cb) => features === undefined ? false : cb;
 
   const newAdverts = [];
-  for (let i = 0; newAdverts.length < 10 || i < adverts.length - 1; i++) {
-    const offer = adverts[i];
-    console.log(offer);
+  for (let i = 0; newAdverts.length < 10 && i < bestAdverts.length - 1; i++) {
+    const advert = bestAdverts[i];
+    const offer = advert.offer;
     if (
       compareValues(offer.type, housingAdvert) &&
       compareValues(offer.rooms, roomsAdvert) &&
@@ -80,31 +78,32 @@ const getFiltersAll = (adverts) => {
       getPriceFilter(priceAdvert, offer.price) &&
       compareValuesFeatures(offer.features, getFilterFeatures)
     ) {
-      newAdverts.push(offer);
+      newAdverts.push(advert);
     }}
   return newAdverts;
 };
 
+const makeAllGood = (rightAdverts) => {
+  advertsToMarkers(rightAdverts.slice(0, SIMILAR_PLACE_COUNT));
+};
 
-const mainRenderPoints = (adverts) => {
-  advertsToMarkers(adverts.slice(0, SIMILAR_PLACE_COUNT));
+const mainRenderPoints = (goodAdverts) => {
+  makeAllGood(goodAdverts);
   filtersMap.addEventListener('change', () => {
-    getFiltersAll(adverts);
-    const clearMarkerPoints = () => {
+
+    const clearMarkerPoints = (points) => {
       markerGroup.clearLayers();
-      advertsToMarkers(getFiltersAll(adverts).sort(compareAdvert).slice(0, SIMILAR_PLACE_COUNT));
+      advertsToMarkers(getFiltersAll(points).sort(compareAdvert).slice(0, SIMILAR_PLACE_COUNT));
     };
-    const debounceClearMarkerPoints = debounce(() => clearMarkerPoints(adverts));
+    const debounceClearMarkerPoints = debounce(() => clearMarkerPoints(goodAdverts));
     debounceClearMarkerPoints();
   });
 };
 
 const clearFilter = () => {
   filtersMap.reset();
-  getData(
-    (places) => mainRenderPoints(places),
-    () => displayWindowErrorServer,
-  );
+  markerGroup.clearLayers();
+  makeAllGood(adverts);
 };
 
 export {mainRenderPoints, clearFilter};

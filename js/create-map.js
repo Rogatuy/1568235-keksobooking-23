@@ -28,8 +28,19 @@ const smallPinIconSetting = {
   iconAnchor: [20, 40],
 };
 
+let adverts = [];
 const map = L.map('map-canvas')
-  .setView (mainPinCoordinates, 10);
+  .on('load', () => {
+    getData(
+      (loadedAdverts) =>  {
+        mainRenderPoints(loadedAdverts),
+        adverts = loadedAdverts;
+      },
+      () => displayWindowErrorServer(),
+    );
+    preloadDisabledRemove();
+  })
+  .setView(mainPinCoordinates, 10);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -37,14 +48,6 @@ L.tileLayer(
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 ).addTo(map);
-
-map.onload = () => {
-  getData (
-    (adverts) => mainRenderPoints(adverts),
-    () => displayWindowErrorServer(),
-  );
-  preloadDisabledRemove();
-};
 
 const mainPinIcon = L.icon(mainPinIconSetting);
 
@@ -164,11 +167,11 @@ const createMarker = (point) => {
     );
 };
 
-const advertsToMarkers = (adverts) => {
-  const sliceAdverts = adverts.slice();
+const advertsToMarkers = (markersAdverts) => {
+  const sliceAdverts = markersAdverts.slice();
   sliceAdverts.forEach((point) => {
     createMarker(point);
   });
 };
 
-export {createMarker, resetMarker, advertsToMarkers, markerGroup};
+export {createMarker, resetMarker, advertsToMarkers, adverts, markerGroup};
