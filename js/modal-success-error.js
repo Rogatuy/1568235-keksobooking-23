@@ -12,30 +12,21 @@ const modalError = templateModalError.querySelector('div');
 const templateModalErrorServer = document.querySelector('#error-server').content;
 const modalErrorServer = templateModalErrorServer.querySelector('div');
 
-const valueOfCapacityDefault = 1;
-
 const disabledCapacityOptions = [2, 3, 100];
+const notDisabledCapacityOption = 1;
 
 const resetFormRooms = () => {
   const selectFormCapacity = document.querySelector('#capacity');
   const optionFormCapacity = selectFormCapacity.querySelectorAll('option');
-  disabledCapacityOptions.forEach((element) => {
-    for (let i = 0; i <=optionFormCapacity.length; i++ )
-    {if (optionFormCapacity[i].value === element) {
-      optionFormCapacity[i].setAttribute('disabled', 'disabled');
-    } else {
-      optionFormCapacity[i].removeAttribute('disabled');
-    }}
-  });
-
-  optionFormCapacity.value = valueOfCapacityDefault;
-  // for (let i = 2; i <= 3; i++) {
-  //   if (i <= event.target.value) {
-  //     const targetOptionCapacity = userCapacitySelect.querySelector(`option[value='${i}']`);
-  //     targetOptionCapacity.removeAttribute('disabled');
-  //   }
-
-
+  for (let i = 0; i < optionFormCapacity.length; i++ ) {
+    disabledCapacityOptions.forEach((item) => {
+      if (optionFormCapacity[i].value === `${item}`) {
+        optionFormCapacity[i].setAttribute('disabled', 'disabled');
+      }
+      if (optionFormCapacity[i].value === `${notDisabledCapacityOption}`) {
+        optionFormCapacity[i].removeAttribute('disabled');}
+    });
+  }
 };
 
 const displayWindowSuccess = () => {
@@ -56,12 +47,14 @@ const displayWindowSuccess = () => {
       document.removeEventListener('click', onClick);
     }
   };
+
   const onClick = () => {
     newModal.style.display='none';
     resetMarker();
     document.querySelector('.ad-form').reset();
     clearFilter();
     clearPhoto();
+    resetFormRooms();
     const placeholderPrice = document.querySelector('#price');
     placeholderPrice.setAttribute('placeholder', '1000');
     document.removeEventListener('click', onClick);
