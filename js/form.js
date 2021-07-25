@@ -18,7 +18,7 @@ const LODGING_MIN_PRICE = {
 const pricePlaceholderDefault = 1000;
 const advertForm = document.querySelector('.ad-form');
 
-const getPictures = function (picture) {
+const getPictures = (picture) => {
   const pictureInput = advertForm.querySelector(picture);
   pictureInput.setAttribute('accept', 'image/png, image/jpeg');
 };
@@ -72,8 +72,10 @@ userRoomNumberSelect.addEventListener('change', (event) => {
   } else {
     userCapacitySelect.value = event.target.value;
     for (let i = 1; i <= 3; i++) {
-      if (i >= event.target.value) {
-        const targetOptionCapacity = userCapacitySelect.querySelector('option[value = "i"]'); //с количеством комнат и гостями разобрался. но тут он i не берет, не понимаю почему. цифру берет, а i нет.
+      if (i <= event.target.value) {
+        // const j = Number(i);
+        // const targetOptionCapacity = userCapacitySelect.querySelector('option[value="1"]');
+        const targetOptionCapacity = userCapacitySelect.querySelector(`option[value='${i}']`); //с количеством комнат и гостями разобрался. но тут он i не берет, не понимаю почему. цифру берет, а i
         targetOptionCapacity.removeAttribute('disabled');
       }
     }
@@ -122,7 +124,7 @@ userRoomNumberSelect.addEventListener('change', (event) => {
 // });
 
 const addressForm = advertForm.querySelector('#address');
-const addAddressInput = function () {
+const addAddressInput = () => {
   marker.on('moveend', (evt) => {
     const mainAddress = evt.target.getLatLng();
     addressForm.value = `${mainAddress.lat.toFixed(5)  }, ${  mainAddress.lng.toFixed(5)}`;
@@ -131,7 +133,7 @@ const addAddressInput = function () {
 
 addAddressInput();
 
-const setUserFormSubmit = function () {
+const setUserFormSubmit = () => {
   advertForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     sendData(
@@ -153,7 +155,7 @@ buttonResetForm.addEventListener('click', () => {
 const userTimeInSelect = advertForm.querySelector('#timein');
 const userTimeOutSelect = advertForm.querySelector('#timeout');
 
-const changeTimeInput = function (event, userTimeSelect) {
+const changeTimeInput = (event, userTimeSelect) => {
   userTimeSelect.value = event.target.value;
 };
 

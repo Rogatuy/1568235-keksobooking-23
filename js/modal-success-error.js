@@ -12,11 +12,11 @@ const modalError = templateModalError.querySelector('div');
 const templateModalErrorServer = document.querySelector('#error-server').content;
 const modalErrorServer = templateModalErrorServer.querySelector('div');
 
-const displayWindowSuccess = function () {
+const displayWindowSuccess = () => {
   const newModal = modalSuccess.cloneNode(true);
   const bodyPage = document.querySelector('body');
   bodyPage.appendChild(newModal);
-  const onKeydown = function (evt) {
+  const onKeydown = (evt) => {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
       resetMarker();
@@ -29,7 +29,7 @@ const displayWindowSuccess = function () {
       document.removeEventListener('click', onClick);
     }
   };
-  const onClick = function () {
+  const onClick = () => {
     newModal.style.display='none';
     resetMarker();
     document.querySelector('.ad-form').reset();
@@ -45,24 +45,24 @@ const displayWindowSuccess = function () {
   document.addEventListener('click', onClick);
 };
 
-const displayWindowError = function () {
+const displayWindowError = () => {
   const newModal = modalError.cloneNode(true);
   const bodyPage = document.querySelector('body');
   const buttonClose = newModal.querySelector('.error__button');
   bodyPage.appendChild(newModal);
-  const onButton = function () {
+  const onButton = () => {
     buttonClose.addEventListener('click', () => {
       newModal.style.display='none';
     });
     document.removeEventListener('click', onButton);
   };
-  const onKeydown = function (evt) {
+  const onKeydown =  (evt) => {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
       document.removeEventListener('keydown', onKeydown);
     }
   };
-  const onClick = function () {
+  const onClick = () => {
     newModal.style.display='none';
     document.removeEventListener('click', onClick);
   };
@@ -72,17 +72,17 @@ const displayWindowError = function () {
   document.addEventListener('click', onButton);
 };
 
-const displayWindowErrorServer = function () {
+const displayWindowErrorServer = () => {
   const newModal = modalErrorServer.cloneNode(true);
   const bodyPage = document.querySelector('body');
   bodyPage.appendChild(newModal);
-  const onKeydown = function (evt) {
+  const onKeydown = (evt) => {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
       document.removeEventListener('keydown', onKeydown);
     }
   };
-  const onClick = function () {
+  const onClick = () => {
     newModal.style.display='none';
     document.removeEventListener('click', onClick);
   };

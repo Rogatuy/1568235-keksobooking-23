@@ -38,7 +38,7 @@ L.tileLayer(
   },
 ).addTo(map);
 
-map.onload = function () {
+map.onload = () => {
   getData (
     (adverts) => mainRenderPoints(adverts),
     () => displayWindowErrorServer(),
@@ -62,14 +62,14 @@ export {marker};
 const addressForm = document.querySelector('#address');
 addressForm.value = `${mainPinCoordinates.lat.toFixed(5)  }, ${  mainPinCoordinates.lng.toFixed(5)}`;
 
-const resetMarker = function () {
+const resetMarker = () => {
   marker.setLatLng(mainPinCoordinates);
 
   map.setView(mainPinCoordinates, 10);
   addressForm.setAttribute('value',`${mainPinCoordinates.lat.toFixed(5)  }, ${  mainPinCoordinates.lng.toFixed(5) }`);
 };
 
-const createCustomPopup = function (point) {
+const createCustomPopup = (point) => {
   const balloonTemplate = document.querySelector('#card').content.querySelector('.popup');
   const popupElement = balloonTemplate.cloneNode(true);
 
@@ -109,7 +109,7 @@ const createCustomPopup = function (point) {
     popupElement.querySelector('.popup__text--time').remove();
   }
 
-  const addFeaturesInPopup = function (arrayFeatures) {
+  const addFeaturesInPopup = (arrayFeatures) => {
     const featuresBlockPopup = popupElement.querySelector('.popup__features');
     for (const elementOfFeatures of arrayFeatures) {
       const classOfLi = `popup__feature--${  elementOfFeatures}`;
@@ -143,7 +143,7 @@ const createCustomPopup = function (point) {
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const createMarker = function (point) {
+const createMarker = (point) => {
   const {lat, lng} = point.location;
   const icon = L.icon(smallPinIconSetting);
   const markerForLodging = L.marker({
@@ -164,7 +164,7 @@ const createMarker = function (point) {
     );
 };
 
-const advertsToMarkers = function (adverts) {
+const advertsToMarkers = (adverts) => {
   const sliceAdverts = adverts.slice();
   sliceAdverts.forEach((point) => {
     createMarker(point);

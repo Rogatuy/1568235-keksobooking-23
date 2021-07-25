@@ -19,7 +19,7 @@ const roomsOfElement = document.querySelector('#housing-rooms');
 const guestsOfElement = document.querySelector('#housing-guests');
 
 
-const getPriceFilter = function (key, price) {
+const getPriceFilter = (key, price) => {
   switch (key) {
     case 'any':
       return true;
@@ -34,7 +34,7 @@ const getPriceFilter = function (key, price) {
   }
 };
 
-const getAdvertRank = function (advert) {
+const getAdvertRank = (advert) => {
   const chooseAdvert = filtersMap.querySelectorAll('.map__checkbox:checked');
   let rank = 0;
   chooseAdvert.forEach((feature) => {
@@ -45,13 +45,13 @@ const getAdvertRank = function (advert) {
   return rank;
 };
 
-const compareAdvert = function (placeA, placeB) {
+const compareAdvert = (placeA, placeB) => {
   const rankA = getAdvertRank(placeA);
   const rankB = getAdvertRank(placeB);
   return rankB - rankA;
 };
 
-const getFilterFeatures = function (offer) {
+const getFilterFeatures = (offer) => {
   const chooseAdvert = filtersMap.querySelectorAll('.map__checkbox:checked');
   chooseAdvert.forEach((element) => {
     if (!offer.includes(element.name)) {
@@ -61,7 +61,7 @@ const getFilterFeatures = function (offer) {
   return true;
 };
 
-const getFiltersAll = function (adverts) {
+const getFiltersAll = (adverts) => {
   const housingAdvert = typeOfElement.value;
   const roomsAdvert = roomsOfElement.value;
   const guestsAdvert = guestsOfElement.value;
@@ -86,11 +86,11 @@ const getFiltersAll = function (adverts) {
 };
 
 
-const mainRenderPoints = function (adverts) {
+const mainRenderPoints = (adverts) => {
   advertsToMarkers(adverts.slice(0, SIMILAR_PLACE_COUNT));
   filtersMap.addEventListener('change', () => {
     getFiltersAll(adverts);
-    const clearMarkerPoints = function () {
+    const clearMarkerPoints = () => {
       markerGroup.clearLayers();
       advertsToMarkers(getFiltersAll(adverts).sort(compareAdvert).slice(0, SIMILAR_PLACE_COUNT));
     };
@@ -99,7 +99,7 @@ const mainRenderPoints = function (adverts) {
   });
 };
 
-const clearFilter = function () {
+const clearFilter = () => {
   filtersMap.reset();
   getData(
     (places) => mainRenderPoints(places),
