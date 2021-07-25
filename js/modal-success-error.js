@@ -12,6 +12,32 @@ const modalError = templateModalError.querySelector('div');
 const templateModalErrorServer = document.querySelector('#error-server').content;
 const modalErrorServer = templateModalErrorServer.querySelector('div');
 
+const valueOfCapacityDefault = 1;
+
+const disabledCapacityOptions = [2, 3, 100];
+
+const resetFormRooms = () => {
+  const selectFormCapacity = document.querySelector('#capacity');
+  const optionFormCapacity = selectFormCapacity.querySelectorAll('option');
+  disabledCapacityOptions.forEach((element) => {
+    for (let i = 0; i <=optionFormCapacity.length; i++ )
+    {if (optionFormCapacity[i].value === element) {
+      optionFormCapacity[i].setAttribute('disabled', 'disabled');
+    } else {
+      optionFormCapacity[i].removeAttribute('disabled');
+    }}
+  });
+
+  optionFormCapacity.value = valueOfCapacityDefault;
+  // for (let i = 2; i <= 3; i++) {
+  //   if (i <= event.target.value) {
+  //     const targetOptionCapacity = userCapacitySelect.querySelector(`option[value='${i}']`);
+  //     targetOptionCapacity.removeAttribute('disabled');
+  //   }
+
+
+};
+
 const displayWindowSuccess = () => {
   const newModal = modalSuccess.cloneNode(true);
   const bodyPage = document.querySelector('body');
@@ -23,6 +49,7 @@ const displayWindowSuccess = () => {
       document.querySelector('.ad-form').reset();
       clearFilter();
       clearPhoto();
+      resetFormRooms();
       const placeholderPrice = document.querySelector('#price');
       placeholderPrice.setAttribute('placeholder', '1000');
       document.removeEventListener('keydown', onKeydown);
@@ -90,4 +117,4 @@ const displayWindowErrorServer = () => {
   document.addEventListener('click', onClick);
 };
 
-export {displayWindowSuccess, displayWindowError, displayWindowErrorServer};
+export {displayWindowSuccess, displayWindowError, displayWindowErrorServer, resetFormRooms};
