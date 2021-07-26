@@ -1,6 +1,4 @@
-import {debounce} from './utils/debounce.js';
 import {markerGroup, advertsToMarkers, adverts} from './create-map.js';
-
 
 const PRICE_MIN_MAX = {
   MIN: 10000,
@@ -49,14 +47,15 @@ const compareAdvert = (placeA, placeB) => {
   return rankB - rankA;
 };
 
-const getFilterFeatures = (offer) => {
+const getFilterFeatures = (checkingFeature) => {
   const chooseAdvert = filtersMap.querySelectorAll('.map__checkbox:checked');
+  let result = true;
   chooseAdvert.forEach((element) => {
-    if (!offer.includes(element.name)) {
-      return false;
+    if (!checkingFeature.includes(element.value)) {
+      result = false;
     }
   });
-  return true;
+  return result;
 };
 
 const getFiltersAll = (bestAdverts) => {
@@ -65,7 +64,7 @@ const getFiltersAll = (bestAdverts) => {
   const guestsAdvert = guestsOfElement.value;
   const priceAdvert = priceOfElement.value;
   const compareValues = (offerValue, filterValue) => filterValue === 'any' ? true : String(offerValue) === filterValue;
-  const compareValuesFeatures = (features, cb) => features === undefined ? false : cb;
+  const compareValuesFeatures = (features, cb) => features === undefined ? false : cb(features);
 
   const newAdverts = [];
   for (let i = 0; newAdverts.length < 10 && i < bestAdverts.length - 1; i++) {
@@ -87,16 +86,12 @@ const makeAllGood = (rightAdverts) => {
   advertsToMarkers(rightAdverts.slice(0, SIMILAR_PLACE_COUNT));
 };
 
+
 const mainRenderPoints = (goodAdverts) => {
   makeAllGood(goodAdverts);
-  filtersMap.addEventListener('change', () => {
 
-    const clearMarkerPoints = (points) => {
-      markerGroup.clearLayers();
-      advertsToMarkers(getFiltersAll(points).sort(compareAdvert).slice(0, SIMILAR_PLACE_COUNT));
-    };
-    const debounceClearMarkerPoints = debounce(() => clearMarkerPoints(goodAdverts));
-    debounceClearMarkerPoints();
+  filtersMap.addEventListener('change', () => {
+    advertsToMarkers(getFiltersAll(goodAdverts).sort(compareAdvert).slice(0, SIMILAR_PLACE_COUNT));
   });
 };
 

@@ -25,7 +25,6 @@ for (let i = 0; i < optionFormCapacity.length; i++ ) {
   }
 }
 
-
 const resetFormRooms = () => {
   for (let i = 0; i < optionFormCapacity.length; i++ ) {
     disabledCapacityOptions.forEach((item) => {
@@ -58,8 +57,8 @@ const displayWindowSuccess = () => {
       const placeholderPrice = document.querySelector('#price');
       placeholderPrice.setAttribute('placeholder', '1000');
       removeListeners();
-    };
-  };
+    }
+  }
 
   function onClick() {
     newModal.style.display='none';
@@ -71,7 +70,7 @@ const displayWindowSuccess = () => {
     const placeholderPrice = document.querySelector('#price');
     placeholderPrice.setAttribute('placeholder', '1000');
     removeListeners();
-  };
+  }
 
   document.addEventListener('keydown', onKeydown);
   document.addEventListener('click', onClick);
@@ -83,29 +82,30 @@ const displayWindowError = () => {
   const bodyPage = document.querySelector('body');
   const buttonClose = newModal.querySelector('.error__button');
   bodyPage.appendChild(newModal);
-  const removeListeners = () => {
+  const removeListeners = function() {
     document.removeEventListener('keydown', onKeydown);
     document.removeEventListener('click', onClick);
     document.removeEventListener('click', onButton);
+  };
 
   function onButton() {
     buttonClose.addEventListener('click', () => {
       newModal.style.display='none';
     });
     removeListeners();
-  };
+  }
 
   function onKeydown (evt) {
     if (isEscEvent(evt)) {
       newModal.style.display='none';
       removeListeners();
     }
-  };
+  }
 
   function onClick() {
     newModal.style.display='none';
     removeListeners();
-  };
+  }
 
   document.addEventListener('keydown', onKeydown);
   document.addEventListener('click', onClick);
@@ -119,7 +119,7 @@ const displayWindowErrorServer = () => {
   const removeListeners = () => {
     document.removeEventListener('keydown', onKeydown);
     document.removeEventListener('click', onClick);
-  }
+  };
 
   function onKeydown (evt) {
     if (isEscEvent(evt)) {
@@ -127,12 +127,14 @@ const displayWindowErrorServer = () => {
       document.removeEventListener('keydown', onKeydown);
       removeListeners();
     }
-  };
+  }
+
   function onClick() {
     newModal.style.display='none';
     document.removeEventListener('click', onClick);
     removeListeners();
-  };
+  }
+
   document.addEventListener('keydown', onKeydown);
   document.addEventListener('click', onClick);
 };

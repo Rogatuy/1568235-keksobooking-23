@@ -15,8 +15,9 @@ const LODGING_MIN_PRICE = {
   palace: 10000,
 };
 
-const pricePlaceholderDefault = 1000;
 const advertForm = document.querySelector('.ad-form');
+const userPriceInput = advertForm.querySelector('#price');
+const pricePlaceholderDefault = userPriceInput.getAttribute('placeholder');
 
 const getPictures = (picture) => {
   const pictureInput = advertForm.querySelector(picture);
@@ -39,7 +40,6 @@ userTitleInput.addEventListener('input', () => {
   userTitleInput.reportValidity();
 });
 
-const userPriceInput = advertForm.querySelector('#price');
 userPriceInput.addEventListener('input', () => {
   const valuePrice = userPriceInput.value;
   if (valuePrice > MAX_PRICE_VALUE) {

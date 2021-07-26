@@ -1,7 +1,8 @@
 import { getData } from './api.js';
-import {preloadDisabledRemove} from './pre-load.js';
+import {filterFormToogleDisabled, preloadDisabledRemove} from './pre-load.js';
 import {displayWindowErrorServer} from './modal-success-error.js';
 import {mainRenderPoints} from './filter.js';
+import {debounce} from './utils/debounce.js';
 
 const LODGING_TYPE = {
   flat: 'Квартира',
@@ -36,11 +37,12 @@ const map = L.map('map-canvas')
         mainRenderPoints(loadedAdverts),
         adverts = loadedAdverts;
       },
-      () => displayWindowErrorServer(),
+      () => {displayWindowErrorServer();filterFormToogleDisabled(true);},
     );
     preloadDisabledRemove();
   })
   .setView(mainPinCoordinates, 10);
+
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -167,11 +169,12 @@ const createMarker = (point) => {
     );
 };
 
-const advertsToMarkers = (markersAdverts) => {
+const advertsToMarkers = debounce((markersAdverts) => {
+  markerGroup.clearLayers();
   const sliceAdverts = markersAdverts.slice();
   sliceAdverts.forEach((point) => {
     createMarker(point);
   });
-};
+});
 
 export {createMarker, resetMarker, advertsToMarkers, adverts, markerGroup};

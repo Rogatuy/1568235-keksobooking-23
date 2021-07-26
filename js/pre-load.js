@@ -6,49 +6,49 @@ const elementDisabled = (element, status) =>  {
   element.disabled = status;
 };
 
-const advertFormDisabled = () => {
-  advertForm.classList.add('ad-form--disabled');
-  advertFormHeader.setAttribute('disabled', 'disabled');
-  for (const advertElement of advertFormElements) {
-    advertElement.setAttribute('disabled', 'disabled');
-  }
-};
-
 const filtersForm = document.querySelector('.map__filters');
 const mapFiltersForm = filtersForm.querySelectorAll('.map__filter');
 
-const filterFormDisabled = () => {
-  filtersForm.classList.add('map__filters--disabled');
-  for (const mapFilter of mapFiltersForm) {
-    mapFilter.setAttribute('disabled', 'disabled');
+const advertFormToogleDisabled = (status) => {
+  if (status) {
+    advertForm.classList.add('ad-form--disabled');
+    elementDisabled(advertFormHeader, true);
+    for (const advertElement of advertFormElements) {
+      elementDisabled(advertElement, true);
+    }
+  } else {
+    advertForm.classList.remove('ad-form--disabled');
+    elementDisabled(advertFormHeader, false);
+    for (const advertElement of advertFormElements) {
+      elementDisabled(advertElement, false);
+    }
+  }
+};
+
+const filterFormToogleDisabled = (status) => {
+  if (status) {
+    filtersForm.classList.add('map__filters--disabled');
+    for (const mapFilter of mapFiltersForm) {
+      elementDisabled(mapFilter, true);
+    }
+  } else {
+    filtersForm.classList.remove('map__filters--disabled');
+    for (const mapFilter of mapFiltersForm) {
+      elementDisabled(mapFilter, false);
+    }
   }
 };
 
 const preloadDisabled = () => {
-  advertFormDisabled();
-  filterFormDisabled();
+  advertFormToogleDisabled(true);
+  filterFormToogleDisabled(true);
 };
 
-// preloadDisabled();
-
-const advertFormRemoveDisabled = () => {
-  advertForm.classList.remove('ad-form--disabled');
-  advertFormHeader.removeAttribute('disabled');
-  for (const advertElement of advertFormElements) {
-    advertElement.removeAttribute('disabled');
-  }
-};
-
-const filterFormRemoveDisabled = () => {
-  filtersForm.classList.remove('map__filters--disabled');
-  for (const mapFilter of mapFiltersForm) {
-    mapFilter.removeAttribute('disabled');
-  }
-};
+preloadDisabled();
 
 const preloadDisabledRemove = () => {
-  advertFormRemoveDisabled();
-  filterFormRemoveDisabled();
+  advertFormToogleDisabled(false);
+  filterFormToogleDisabled(false);
 };
 
-export {preloadDisabledRemove};
+export {preloadDisabledRemove, filterFormToogleDisabled};
